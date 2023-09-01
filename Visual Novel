@@ -1,0 +1,75 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+[System.Serializable]
+public class Character
+{
+    public string name;
+    public Sprite portrait;
+}
+
+[System.Serializable]
+public class Dialogue
+{
+    public Character character;
+    [TextArea(3, 10)]
+    public string text;
+}
+
+public class VisualNovelManager : MonoBehaviour
+{
+    public Text nameText;
+    public Text dialogueText;
+    public Text portraitText;
+    public RawImage portraitImage; 
+    public Button nextButton;
+
+    public List<Dialogue> dialogues = new List<Dialogue>();
+    private int dialogueIndex = 0;
+
+    private void Start()
+    {
+        if (dialogues.Count > 0)
+            DisplayDialogue(dialogues[dialogueIndex]);
+
+        nextButton.onClick.AddListener(ProceedToNextDialogue);
+    }
+
+    void ProceedToNextDialogue()
+    {
+        if (dialogueIndex < dialogues.Count - 1)
+        {
+            dialogueIndex++;
+            DisplayDialogue(dialogues[dialogueIndex]);
+        }
+        else
+        {
+            EndDialogue();
+        }
+    }
+
+    void DisplayDialogue(Dialogue dialogue)
+    {
+        nameText.text = dialogue.character.name;
+        dialogueText.text = dialogue.text;
+
+        if (dialogue.character.portrait != null)
+        {
+            portraitImage.texture = dialogue.character.portrait.texture;
+        
+        }
+      
+        else
+        {
+            Debug.LogWarning("");
+        }
+    }
+
+
+    void EndDialogue()
+    {
+        // Implement any actions to be taken at the end of the dialogue
+    }
+}
